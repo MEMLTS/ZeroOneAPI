@@ -1,0 +1,45 @@
+{
+  "name": "ZeroOneAPI",
+  "version": "1.0.0",
+  "description": "A lightweight, open, and continuously maintained public API aggregation service.",
+  "main": "src/app.ts",
+  "scripts": {
+    "dev": "ts-node --files src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "aggregation",
+    "service",
+    "public",
+    "open",
+    "lightweight",
+    "typescript"
+  ],
+  "author": "MapleLeaf",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@eslint/js": "^9.27.0",
+    "@koa/cors": "^5.0.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/koa": "^2.15.0",
+    "@types/koa__cors": "^5.0.0",
+    "@types/koa__router": "^12.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "eslint-import-resolver-typescript": "^4.4.0",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^16.2.0",
+    "koa": "^3.0.0",
+    "koa-body": "^6.0.1",
+    "koa-router": "^13.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "zod": "^3.25.51"
+  },
+  "devDependencies": {
+    "@types/koa-router": "^7.4.8"
+  }
+}
