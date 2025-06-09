@@ -1,5 +1,3 @@
-import { PluginMeta } from "types/PluginMeta";
-
 export const meta: PluginMeta = {
     path: "/api/icp-checker",
     method: ["GET", "POST"],
