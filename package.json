@@ -1,5 +1,5 @@
 {
-  "name": "ZeroOneAPI",
+  "name": "zero_one_api",
   "version": "1.0.0",
   "description": "A lightweight, open, and continuously maintained public API aggregation service.",
   "main": "src/app.ts",

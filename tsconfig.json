@@ -16,8 +16,8 @@
             "@middlewares/*": ["middlewares/*"],
             "@config/*": ["config/*"],
             "@routes/*": ["routes/*"],
-            "@types/*": ["types/*"],
+            "@types/*": ["src/types/*"],
           }
     },
-    "include": ["src", "src/types", "src/types"]
+    "include": ["src", "src/types"]
 }
