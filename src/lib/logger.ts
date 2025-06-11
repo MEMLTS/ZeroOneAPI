@@ -6,7 +6,7 @@ log4js.configure({
       type: 'console',
       layout: {
         type: 'pattern',
-        pattern: '%[[%d{yyyy/MM/dd hh:mm:ss.SSS}][%5p]%]%m'
+        pattern: '%[[%d{yyyy/MM/dd hh:mm:ss.SSS}][%4p]%]%m'
       }
     },
     file: {
@@ -17,7 +17,7 @@ log4js.configure({
       compress: true,
       layout: {
         type: 'pattern',
-        pattern: '[%d{yyyy/MM/dd hh:mm:ss.SSS}][%5p] %m'
+        pattern: '[%d{yyyy/MM/dd hh:mm:ss.SSS}][%4p] %m'
       }
     },
     errorFile: {
@@ -25,7 +25,7 @@ log4js.configure({
       filename: 'logs/error.log',
       layout: {
         type: 'pattern',
-        pattern: '[%d{yyyy/MM/dd hh:mm:ss.SSS}][%5p] %m'
+        pattern: '[%d{yyyy/MM/dd hh:mm:ss.SSS}][%4p] %m'
       }
     },
     errorFilter: {
