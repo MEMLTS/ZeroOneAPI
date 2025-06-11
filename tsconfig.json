@@ -2,7 +2,7 @@
     "compilerOptions": {
         "typeRoots": [
             "./node_modules/@types",
-            "types/**/*.d.ts"],
+            "./src/types/*"],
         "baseUrl": "./src",
         "moduleResolution":"nodenext",
         "module": "NodeNext",
@@ -18,8 +18,8 @@
             "@middlewares/*": ["middlewares/*"],
             "@config/*": ["config/*"],
             "@routes/*": ["routes/*"],
-            "@types/*": ["types/*"],
+            "@types/*": ["src/types/*"],
           }
     },
-    "include": ["src", "types/**/*.d.ts"],
+    "include": ["src", "src/types/**/*.d.ts"],
 }

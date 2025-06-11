@@ -1,11 +1,9 @@
 import koa from 'koa';
 import cors from '@koa/cors';
-import koaBody from 'koa-body';
-import koaRouter from 'koa-router';
-
+import log from './middlewares/logger';
 const app = new koa();
-const router = new koaRouter();
 
+app.use(log);
 app.use(cors)
 
 export default app;
