@@ -71,7 +71,7 @@ export class RedisClient {
      * @returns 存在的键数量
      */
     async exists(...keys: string[]): Promise<number> {
-        return this.client.exists(...keys);
+        return this.client.exists(keys);
     }
 
     /**
@@ -98,7 +98,7 @@ export class RedisClient {
      * @param seconds 过期时间（秒）
      * @returns 是否设置成功
      */
-    async expire(key: string, seconds: number): Promise<boolean> {
+    async expire(key: string, seconds: number): Promise<number> {
         return this.client.expire(key, seconds);
     }
 
@@ -146,7 +146,7 @@ export class RedisClient {
      * @param key 哈希键名
      * @param field 字段名
      */
-    async hexists(key: string, field: string): Promise<boolean> {
+    async hexists(key: string, field: string): Promise<number> {
         return this.client.hExists(key, field);
     }
 
@@ -230,7 +230,7 @@ export class RedisClient {
      * @param member 要检查的元素
      * @returns 是否存在
      */
-    async sismember(key: string, member: string): Promise<boolean> {
+    async sismember(key: string, member: string): Promise<number> {
         return this.client.sIsMember(key, member);
     }
 }
