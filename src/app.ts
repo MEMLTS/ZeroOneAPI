@@ -5,9 +5,10 @@ import PluginManager from '@lib/plugins/loader';
 
 const app = new koa();
 
-PluginManager.loadPlugins(app);  // 加载所有插件
 app.use(log);
 app.use(cors)
+
+PluginManager.loadPlugins(app);  // 加载所有插件
 
 app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url}`);

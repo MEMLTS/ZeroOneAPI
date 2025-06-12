@@ -1,5 +1,6 @@
 import { PluginMeta } from "../../../types/plugin.interface";
 import { Next, Context } from "koa";
+
 export const meta: PluginMeta = {
     path: "/api/icp-checker",
     method: ["GET", "POST"],
@@ -26,4 +27,5 @@ export const handler = async (ctx: Context, next: Next) => {
     ctx.set("Content-Type", "application/json");
 
     ctx.body = { message: "Headers set successfully" };
+    return next();
 };
