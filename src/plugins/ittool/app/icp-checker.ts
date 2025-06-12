@@ -23,6 +23,7 @@ export const meta: PluginMeta = {
 };
 
 export const handler = async (ctx: Context, next: Next) => {
+    console.log("icp-checker");
     ctx.set("X-Powered-By", "ZeroOneAPI");
     ctx.set("Content-Type", "application/json");
 
