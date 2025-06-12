@@ -1,3 +1,5 @@
+import { PluginMeta } from "../../../types/plugin.interface";
+import { Next, Context } from "koa";
 export const meta: PluginMeta = {
     path: "/api/icp-checker",
     method: ["GET", "POST"],
@@ -19,6 +21,9 @@ export const meta: PluginMeta = {
     }
 };
 
-export const handler = async (req: Request, res: Response) => {
-    // TODO: 主逻辑
-}
+export const handler = async (ctx: Context, next: Next) => {
+    ctx.set("X-Powered-By", "ZeroOneAPI");
+    ctx.set("Content-Type", "application/json");
+
+    ctx.body = { message: "Headers set successfully" };
+};
