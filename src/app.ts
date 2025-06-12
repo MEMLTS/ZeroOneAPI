@@ -1,7 +1,7 @@
 import koa from 'koa';
 import cors from '@koa/cors';
 import log from '@middlewares/logger';
-import PluginManager from '@lib/plugins/loader';
+import PluginManager from '@lib/plugins/Loader';
 
 const app = new koa();
 

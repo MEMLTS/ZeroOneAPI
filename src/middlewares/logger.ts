@@ -1,4 +1,4 @@
-import logger from "@lib/logger";
+import logger from "@lib/Logger";
 import { Context, Next } from "koa";
 
 const log = async (ctx: Context, next: Next) => {

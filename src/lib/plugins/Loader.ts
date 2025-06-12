@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import KoaRouter from 'koa-router';
 import { Plugin } from '../../types/plugin.interface';
-import logger from '@lib/logger';
+import logger from '@lib/Logger';
 import { Context, Next } from 'koa';
 
 export class PluginManager {
