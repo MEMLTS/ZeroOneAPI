@@ -23,10 +23,20 @@ export const meta: PluginMeta = {
 };
 
 export const handler = async (ctx: Context, next: Next) => {
-    console.log("icp-checker");
+    const { domain, cache = true } = ctx.query;
     ctx.set("X-Powered-By", "ZeroOneAPI");
     ctx.set("Content-Type", "application/json");
 
-    ctx.body = { message: "Headers set successfully" };
+    ctx.body = {
+        message: "Headers set successfully",
+        data: await getIcpInfo(domain as string, cache as boolean),
+    };
     return next();
 };
+
+const getIcpInfo = async (domain: string, cache: boolean) => {
+    return {
+        domain,
+        cache,
+    };
+}
