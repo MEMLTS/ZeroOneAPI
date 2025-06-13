@@ -4,8 +4,7 @@
   "description": "A lightweight, open, and continuously maintained public API aggregation service.",
   "main": "src/app.ts",
   "scripts": {
-    "dev": "bun src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "bun src/server.ts"
   },
   "keywords": [
     "api",
