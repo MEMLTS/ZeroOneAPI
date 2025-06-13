@@ -1,18 +1,42 @@
 import { createClient, RedisClientType } from 'redis';
+import logger from '@lib/Logger';
+
+interface RedisClientConfig {
+    host: string;
+    port: number;
+    password?: string;
+    db?: number;
+}
 
 /**
- * Redis 客户端封装类，支持字符串、哈希、列表、集合等常用操作。
+ * Redis 客户端封装类
  */
 export class RedisClient {
     private client: RedisClientType;
 
     /**
      * 创建 RedisClient 实例
-     * @param url Redis 连接地址，默认为 'redis://localhost:6379'
+     * @param config Redis 连接配置
      */
-    constructor(url: string = 'redis://localhost:6379') {
-        this.client = createClient({ url });
-        this.client.on('error', (err) => console.error('Redis Error:', err));
+    constructor(config?: Partial<RedisClientConfig>) {
+        const host = config?.host || 'localhost';
+        const port = config?.port || 6379;
+        const password = config?.password || undefined;
+        const db = config?.db ?? undefined;
+
+        this.client = createClient({
+            socket: {
+                host,
+                port,
+            },
+            password,
+            database: db,
+        });
+
+        this.client.on('error', (err) => logger.error('Redis Error:', err));
+        this.client.on('connect', () => logger.info('Redis client connecting...'));
+        this.client.on('ready', () => logger.info('Redis client ready.'));
+        this.client.on('end', () => logger.info('Redis client disconnected.'));
     }
 
     /**
@@ -21,6 +45,7 @@ export class RedisClient {
     async connect(): Promise<void> {
         if (!this.client.isOpen) {
             await this.client.connect();
+            logger.info('Redis client connected.');
         }
     }
 
