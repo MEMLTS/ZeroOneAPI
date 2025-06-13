@@ -19,6 +19,7 @@
   "author": "MapleLeaf",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "dotenv": "^16.5.0",
     "koa": "^3.0.0",
     "koa-body": "^6.0.1",
     "koa-router": "^13.0.1",

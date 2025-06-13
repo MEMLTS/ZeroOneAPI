@@ -24,7 +24,6 @@ export const meta: PluginMeta = {
 
 export const handler = async (ctx: Context, next: Next) => {
     const { domain, cache = true } = ctx.query;
-    ctx.set("X-Powered-By", "ZeroOneAPI");
     ctx.set("Content-Type", "application/json");
 
     ctx.body = {

@@ -1,6 +1,10 @@
 import app from './app';
+import { Config } from '@lib/Config';
 
-const PORT = process.env.PORT || 3000;
+const config = Config.getInstance();
+
+const PORT = config.getNumber('PORT') || 2598;
+const HOST = config.get('HOST') || '0.0.0.0';
 
 const logo = String.raw`
  ________                                ______                        ______   _______  ______
@@ -16,6 +20,6 @@ const logo = String.raw`
 
 console.log(logo);
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log(`🚀 API Server running at http://localhost:${PORT}`);
 });
