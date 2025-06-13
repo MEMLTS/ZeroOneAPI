@@ -39,7 +39,7 @@ export class PluginManager {
             );
 
             for (const file of exampleFiles) {
-                const pluginModule = this.requireModule(path.join(exampleDir, file.replace(/\.(ts|js)$/, '')));
+                const pluginModule = this.requireModule(path.join(exampleDir, file));
                 const pluginList = this.normalizePluginExports(pluginModule);
 
                 for (const plugin of pluginList) {
@@ -95,19 +95,13 @@ export class PluginManager {
     }
 
     /**
-     * 支持插件导出为单个插件、插件对象集
+     * 支持插件导出为单个插件或插件数组
      */
     private normalizePluginExports(mod: any): Plugin[] {
         if (!mod) return [];
-        if (typeof mod === 'object') {
-            const list: Plugin[] = [];
-            for (const key in mod) {
-                const item = mod[key];
-                if (this.isValidPlugin(item)) {
-                    list.push(item);
-                }
-            }
-            return list;
+
+        if (Array.isArray(mod)) {
+            return mod.filter(this.isValidPlugin);
         }
 
         if (this.isValidPlugin(mod)) {

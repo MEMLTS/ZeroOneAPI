@@ -1,24 +1,29 @@
-import { PluginMeta } from "../../types/plugin.interface";
+import { Plugin, PluginMeta } from "../../types/plugin.interface";
 import { Next, Context } from "koa";
 
-const meta: PluginMeta = {
-    path: "/api/hello-word",
-    method: ["GET", "POST"],
-    description: "",
-    tags: [],
-    params: {}
-};
-
-const handler = async (ctx: Context, next: Next) => {
-    ctx.body = {
-        message: "Hello World",
+function createHelloWorldPlugin(): Plugin[] {
+    const meta: PluginMeta = {
+        path: "/api/hello-word",
+        method: ["GET", "POST"],
+        description: "A simple Hello World plugin",
+        tags: ["example"],
+        params: {}
     };
-    return next();
-};
 
-export default {
-    helloWord: {
+    const handler = async (ctx: Context, next: Next) => {
+        ctx.body = {
+            message: "Hello World",
+        };
+        await next();
+    };
+
+    const plugin: Plugin = {
         meta,
-        handler,
-    }
-};
+        handler
+    };
+
+    return [plugin];
+}
+
+const plugins: Plugin[] = createHelloWorldPlugin();
+export default plugins;

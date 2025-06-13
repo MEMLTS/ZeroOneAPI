@@ -4,9 +4,9 @@ import {
 } from './app/icp-checker';
 
 
-export default {
-  icpCheck: {
+export default [
+  {
     meta: icpCheckMeta,
     handler: icpCheckHandler,
   }
-};
+]
