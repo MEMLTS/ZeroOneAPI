@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import KoaRouter from 'koa-router';
 import { Plugin } from '../../types/plugin.interface';
-import logger from '@lib/Logger';
 import { Context, Next } from 'koa';
 
 export class PluginManager {
@@ -55,7 +54,7 @@ export class PluginManager {
         app.use(this.router.routes());
         app.use(this.router.allowedMethods());
 
-        logger.info(`Loaded ${this.plugins.length} plugins.`);
+        Logger.info(`Loaded ${this.plugins.length} plugins.`);
     }
 
     registerRoute(plugin: Plugin): void {
@@ -70,7 +69,7 @@ export class PluginManager {
                     await handler(ctx, next);
                 });
             } else {
-                logger.warn(`Invalid HTTP method: ${m} for route: ${path}`);
+                Logger.warn(`Invalid HTTP method: ${m} for route: ${path}`);
             }
         });
     }
@@ -89,7 +88,7 @@ export class PluginManager {
             const mod = require(resolvedPath);
             return mod?.default ?? mod;
         } catch (err: unknown) {
-            logger.warn(`Failed to load plugin at ${modulePath}: ${err}`);
+            Logger.warn(`Failed to load plugin at ${modulePath}: ${err}`);
             return null;
         }
     }

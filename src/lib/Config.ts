@@ -1,12 +1,11 @@
 import dotenv from 'dotenv';
-import logger from '@lib/Logger';
 
 export class Config {
     private static instance: Config;
     private env: NodeJS.ProcessEnv;
 
     private constructor(envFilePath?: string) {
-        logger.info('Loading environment variables...');
+        Logger.info('Loading environment variables...');
         dotenv.config({ path: envFilePath });
         this.env = process.env;
     }
@@ -61,7 +60,7 @@ export class Config {
         if (val === undefined) return undefined;
         const num = Number(val);
         if (isNaN(num)) {
-            logger.warn(`Environment variable ${key} is not a valid number: ${val}`);
+            Logger.warn(`Environment variable ${key} is not a valid number: ${val}`);
             return undefined;
         }
         return num;
@@ -77,7 +76,7 @@ export class Config {
         const normalized = val.toLowerCase();
         if (['true', '1', 'yes'].includes(normalized)) return true;
         if (['false', '0', 'no'].includes(normalized)) return false;
-        logger.warn(`Environment variable ${key} is not a valid boolean: ${val}`);
+        Logger.warn(`Environment variable ${key} is not a valid boolean: ${val}`);
         return false;
     }
 }

@@ -1,5 +1,4 @@
 import { createClient, RedisClientType } from 'redis';
-import logger from '@lib/Logger';
 
 interface RedisClientConfig {
     host: string;
@@ -33,10 +32,10 @@ export class RedisClient {
             database: db,
         });
 
-        this.client.on('error', (err) => logger.error('Redis Error:', err));
-        this.client.on('connect', () => logger.info('Redis client connecting...'));
-        this.client.on('ready', () => logger.info('Redis client ready.'));
-        this.client.on('end', () => logger.info('Redis client disconnected.'));
+        this.client.on('error', (err) => Logger.error('Redis Error:', err));
+        this.client.on('connect', () => Logger.info('Redis client connecting...'));
+        this.client.on('ready', () => Logger.info('Redis client ready.'));
+        this.client.on('end', () => Logger.info('Redis client disconnected.'));
     }
 
     /**
@@ -45,7 +44,7 @@ export class RedisClient {
     async connect(): Promise<void> {
         if (!this.client.isOpen) {
             await this.client.connect();
-            logger.info('Redis client connected.');
+            Logger.info('Redis client connected.');
         }
     }
 

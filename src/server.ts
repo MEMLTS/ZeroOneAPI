@@ -1,7 +1,9 @@
+import logger from '@lib/Logger';
 import app from './app';
 import { Config } from '@lib/Config';
 import { RedisClient } from '@lib/Redis';
-import logger from '@lib/Logger';
+
+
 (async () => {
     const config = Config.getInstance();
 
@@ -18,10 +20,13 @@ import logger from '@lib/Logger';
     };
 
     // Redis Client 初始化
-    const redis = new RedisClient(redisOptions);
+    const redisClient = new RedisClient(redisOptions);
     try {
-        await redis.connect();
+        await redisClient.connect();
         logger.info('Redis connected successfully.');
+        if (!globalThis.redis) {
+            globalThis.redis = redisClient
+        }
     } catch (err) {
         logger.error('Failed to connect to Redis:', err);
         process.exit(1);

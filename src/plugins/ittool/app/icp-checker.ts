@@ -26,6 +26,8 @@ export const handler = async (ctx: Context) => {
     const { domain, cache = true } = ctx.query;
     ctx.set("Content-Type", "application/json");
 
+    redis.set("icp-checker:domain", domain as string);
+
     ctx.body = {
         message: "Headers set successfully",
         data: await getIcpInfo(domain as string, cache as boolean),
