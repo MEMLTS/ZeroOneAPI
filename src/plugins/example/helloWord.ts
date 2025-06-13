@@ -17,6 +17,8 @@ const handler = async (ctx: Context, next: Next) => {
 };
 
 export default {
-    meta,
-    handler,
+    helloWord: {
+        meta,
+        handler,
+    }
 };

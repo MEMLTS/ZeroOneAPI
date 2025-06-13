@@ -9,10 +9,6 @@ export class PluginManager {
     private plugins: Plugin[] = [];
     private router = new KoaRouter();
 
-    /**
-     * 加载所有插件并注册到 Koa 应用中
-     * @param app - Koa 实例（通常是 `new Koa()`）
-     */
     loadPlugins(app: any): void {
         const pluginDir = path.resolve(__dirname, '../../plugins');
 
@@ -25,10 +21,13 @@ export class PluginManager {
         for (const folder of pluginFolders) {
             const indexPath = path.join(pluginDir, folder, 'index');
             const pluginModule = this.requireModule(indexPath);
+            const pluginList = this.normalizePluginExports(pluginModule);
 
-            if (this.isValidPlugin(pluginModule)) {
-                this.plugins.push(pluginModule);
-                this.registerRoute(pluginModule);
+            for (const plugin of pluginList) {
+                if (this.isValidPlugin(plugin)) {
+                    this.plugins.push(plugin);
+                    this.registerRoute(plugin);
+                }
             }
         }
 
@@ -41,9 +40,13 @@ export class PluginManager {
 
             for (const file of exampleFiles) {
                 const pluginModule = this.requireModule(path.join(exampleDir, file.replace(/\.(ts|js)$/, '')));
-                if (this.isValidPlugin(pluginModule)) {
-                    this.plugins.push(pluginModule);
-                    this.registerRoute(pluginModule);
+                const pluginList = this.normalizePluginExports(pluginModule);
+
+                for (const plugin of pluginList) {
+                    if (this.isValidPlugin(plugin)) {
+                        this.plugins.push(plugin);
+                        this.registerRoute(plugin);
+                    }
                 }
             }
         }
@@ -55,10 +58,6 @@ export class PluginManager {
         logger.info(`Loaded ${this.plugins.length} plugins.`);
     }
 
-    /**
-     * 注册插件中的路由到 Koa Router
-     * @param plugin - 插件对象，包含 meta 信息与 handler 函数
-     */
     registerRoute(plugin: Plugin): void {
         const { path, method } = plugin.meta;
         const { handler } = plugin;
@@ -76,25 +75,14 @@ export class PluginManager {
         });
     }
 
-    /**
-     * 获取所有已加载的插件
-     */
     getPlugins(): Plugin[] {
         return this.plugins;
     }
 
-    /**
-     * 判断模块是否为合法插件（存在 meta 和 handler）
-     * @param mod - 动态导入的模块
-     */
     private isValidPlugin(mod: any): mod is Plugin {
         return mod && typeof mod.meta === 'object' && typeof mod.handler === 'function';
     }
 
-    /**
-     * 动态加载模块，兼容 `.ts`, `.js`，避免扩展名带来的 require 问题
-     * @param modulePath - 模块路径（不包含扩展名）
-     */
     private requireModule(modulePath: string): any {
         try {
             const resolvedPath = require.resolve(modulePath);
@@ -104,6 +92,29 @@ export class PluginManager {
             logger.warn(`Failed to load plugin at ${modulePath}: ${err}`);
             return null;
         }
+    }
+
+    /**
+     * 支持插件导出为单个插件、插件对象集
+     */
+    private normalizePluginExports(mod: any): Plugin[] {
+        if (!mod) return [];
+        if (typeof mod === 'object') {
+            const list: Plugin[] = [];
+            for (const key in mod) {
+                const item = mod[key];
+                if (this.isValidPlugin(item)) {
+                    list.push(item);
+                }
+            }
+            return list;
+        }
+
+        if (this.isValidPlugin(mod)) {
+            return [mod];
+        }
+
+        return [];
     }
 }
 

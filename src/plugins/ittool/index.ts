@@ -1,9 +1,12 @@
 import {
-    meta as icpCheckMeta,
-    handler as icpCheckHandler
+  meta as icpCheckMeta,
+  handler as icpCheckHandler
 } from './app/icp-checker';
 
+
 export default {
-  meta: icpCheckMeta,
-  handler: icpCheckHandler
+  icpCheck: {
+    meta: icpCheckMeta,
+    handler: icpCheckHandler,
+  }
 };
