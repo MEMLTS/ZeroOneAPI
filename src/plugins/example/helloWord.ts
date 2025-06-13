@@ -1,5 +1,5 @@
 import { Plugin, PluginMeta } from "../../types/plugin.interface";
-import { Next, Context } from "koa";
+import { Context } from "koa";
 
 function createHelloWorldPlugin(): Plugin[] {
     const meta: PluginMeta = {
@@ -10,11 +10,10 @@ function createHelloWorldPlugin(): Plugin[] {
         params: {}
     };
 
-    const handler = async (ctx: Context, next: Next) => {
+    const handler = async (ctx: Context) => {
         ctx.body = {
             message: "Hello World",
         };
-        await next();
     };
 
     const plugin: Plugin = {

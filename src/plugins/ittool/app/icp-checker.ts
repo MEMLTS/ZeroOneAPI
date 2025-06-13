@@ -1,5 +1,5 @@
 import { PluginMeta } from "../../../types/plugin.interface";
-import { Next, Context } from "koa";
+import { Context } from "koa";
 
 export const meta: PluginMeta = {
     path: "/api/icp-checker",
@@ -22,7 +22,7 @@ export const meta: PluginMeta = {
     }
 };
 
-export const handler = async (ctx: Context, next: Next) => {
+export const handler = async (ctx: Context) => {
     const { domain, cache = true } = ctx.query;
     ctx.set("Content-Type", "application/json");
 
@@ -30,7 +30,6 @@ export const handler = async (ctx: Context, next: Next) => {
         message: "Headers set successfully",
         data: await getIcpInfo(domain as string, cache as boolean),
     };
-    return next();
 };
 
 const getIcpInfo = async (domain: string, cache: boolean) => {
