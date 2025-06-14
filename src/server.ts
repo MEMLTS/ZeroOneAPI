@@ -17,7 +17,7 @@ const logo = String.raw`
 
 console.log(logo);
 
-//== Logger 初始化
+//=== Logger 初始化 ===
 LoggerFactory.getLogger();
 
 Logger.info('Starting server...');

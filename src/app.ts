@@ -3,9 +3,6 @@ import cors from '@koa/cors';
 import log from '@middlewares/logger';
 import statistics from '@middlewares/statistics';
 import PluginManager from '@lib/plugins/Loader';
-import { LoggerFactory } from '@lib/Logger';
-
-const Logger = LoggerFactory.getLogger();
 
 export class ApiServer {
     private readonly app: Koa;
@@ -48,7 +45,7 @@ export class ApiServer {
     public async listen(port: number, host: string = '0.0.0.0'): Promise<void> {
         await this.initialize();
         this.app.listen(port, host, () => {
-            Logger.info(`✅ API Server is listening on http://${host}:${port}`);
+            Logger.info(`API Server is listening on http://${host}:${port}`);
         });
     }
 }
