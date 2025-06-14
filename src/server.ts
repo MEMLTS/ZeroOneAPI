@@ -1,8 +1,26 @@
-import logger from '@lib/Logger';
-import app from './app';
+import { LoggerFactory } from '@lib/Logger';
+import { ApiServer } from './app';
 import { Config } from '@lib/Config';
 import { RedisClient } from '@lib/Redis';
 
+const logo = String.raw`
+ ________                                ______                        ______   _______  ______
+|        \                              /      \                      /      \ |       \|      \
+ \$$$$$$$$ ______    ______    ______  |  $$$$$$\ _______    ______  |  $$$$$$\| $$$$$$$\\$$$$$$
+    /  $$ /      \  /      \  /      \ | $$  | $$|       \  /      \ | $$__| $$| $$__/ $$ | $$
+   /  $$ |  $$$$$$\|  $$$$$$\|  $$$$$$\| $$  | $$| $$$$$$$\|  $$$$$$\| $$    $$| $$    $$ | $$
+  /  $$  | $$    $$| $$   \$$| $$  | $$| $$  | $$| $$  | $$| $$    $$| $$$$$$$$| $$$$$$$  | $$
+ /  $$___| $$$$$$$$| $$      | $$__/ $$| $$__/ $$| $$  | $$| $$$$$$$$| $$  | $$| $$      _| $$_
+|  $$    \\$$     \| $$       \$$    $$ \$$    $$| $$  | $$ \$$     \| $$  | $$| $$     |   $$ \
+ \$$$$$$$$ \$$$$$$$ \$$        \$$$$$$   \$$$$$$  \$$   \$$  \$$$$$$$ \$$   \$$ \$$      \$$$$$$
+`
+
+console.log(logo);
+
+//== Logger 初始化
+LoggerFactory.getLogger();
+
+Logger.info('Starting server...');
 
 (async () => {
     const config = Config.getInstance();
@@ -23,33 +41,17 @@ import { RedisClient } from '@lib/Redis';
     const redisClient = new RedisClient(redisOptions);
     try {
         await redisClient.connect();
-        logger.info('Redis connected successfully.');
+        Logger.info('Redis connected successfully.');
         if (!globalThis.redis) {
             globalThis.redis = redisClient
         }
     } catch (err) {
-        logger.error('Failed to connect to Redis:', err);
+        Logger.error('Failed to connect to Redis:', err);
         process.exit(1);
     }
-
-    const logo = String.raw`
- ________                                ______                        ______   _______  ______
-|        \                              /      \                      /      \ |       \|      \
- \$$$$$$$$ ______    ______    ______  |  $$$$$$\ _______    ______  |  $$$$$$\| $$$$$$$\\$$$$$$
-    /  $$ /      \  /      \  /      \ | $$  | $$|       \  /      \ | $$__| $$| $$__/ $$ | $$
-   /  $$ |  $$$$$$\|  $$$$$$\|  $$$$$$\| $$  | $$| $$$$$$$\|  $$$$$$\| $$    $$| $$    $$ | $$
-  /  $$  | $$    $$| $$   \$$| $$  | $$| $$  | $$| $$  | $$| $$    $$| $$$$$$$$| $$$$$$$  | $$
- /  $$___| $$$$$$$$| $$      | $$__/ $$| $$__/ $$| $$  | $$| $$$$$$$$| $$  | $$| $$      _| $$_
-|  $$    \\$$     \| $$       \$$    $$ \$$    $$| $$  | $$ \$$     \| $$  | $$| $$     |   $$ \
- \$$$$$$$$ \$$$$$$$ \$$        \$$$$$$   \$$$$$$  \$$   \$$  \$$$$$$$ \$$   \$$ \$$      \$$$$$$
-`
-
-    console.log(logo);
-
-    app.listen(PORT, HOST, () => {
-        logger.info(`API Server running at http://localhost:${PORT}`);
-    });
+    const server = new ApiServer();
+    server.listen(PORT, HOST);
 })().catch(err => {
-    logger.error('Failed to start server:', err);
+    Logger.error('Failed to start server:', err);
     process.exit(1);
 });

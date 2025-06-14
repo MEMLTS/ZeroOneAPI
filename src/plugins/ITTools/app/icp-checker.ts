@@ -66,7 +66,7 @@ export const handler = async (ctx: Context) => {
     if (cache && redis) {
         const cached = await redis.get(cacheKey);
         if (cached) {
-            Logger.info(`[ICP] 命中缓存: ${domain}`);
+            Logger.debug(`[ICP] 命中缓存: ${domain}`);
             ctx.body = JSON.parse(cached);
             return;
         }

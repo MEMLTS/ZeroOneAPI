@@ -5,7 +5,6 @@ export class Config {
     private env: NodeJS.ProcessEnv;
 
     private constructor(envFilePath?: string) {
-        Logger.info('Loading environment variables...');
         dotenv.config({ path: envFilePath });
         this.env = process.env;
     }
@@ -60,7 +59,6 @@ export class Config {
         if (val === undefined) return undefined;
         const num = Number(val);
         if (isNaN(num)) {
-            Logger.warn(`Environment variable ${key} is not a valid number: ${val}`);
             return undefined;
         }
         return num;
@@ -76,7 +74,6 @@ export class Config {
         const normalized = val.toLowerCase();
         if (['true', '1', 'yes'].includes(normalized)) return true;
         if (['false', '0', 'no'].includes(normalized)) return false;
-        Logger.warn(`Environment variable ${key} is not a valid boolean: ${val}`);
         return false;
     }
 }
