@@ -10,7 +10,7 @@ export class LoggerFactory {
                     type: 'console',
                     layout: {
                         type: 'pattern',
-                        pattern: '%[[%d{yyyy/MM/dd hh:mm:ss.SSS}][%4p]%]%m'
+                        pattern: '%[[%d{yyyy/MM/dd hh:mm:ss.SSS}][%4p]%]%m '
                     }
                 },
                 file: {

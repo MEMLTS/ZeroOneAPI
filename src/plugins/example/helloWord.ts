@@ -18,7 +18,7 @@ export class ExamplePlugin extends Plugin {
     }
 
     async helloHandler(ctx: Context, next: Next) {
-        ctx.body = "Hello World!";
+        ctx.body = { "Hello World!": "example plugin" };
         await next();
     }
 }
