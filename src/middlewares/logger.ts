@@ -5,7 +5,8 @@ import { Context, Next } from "koa";
  */
 const log = async (ctx: Context, next: Next) => {
   Logger.info(`[${ctx.ip}][Method] ${ctx.method} [Path]${decodeURIComponent(ctx.url)}`);
-  return next();
+  await next();
+  Logger.info(`[${ctx.ip}][Method] ${ctx.method} [Path]${decodeURIComponent(ctx.url)} [Status] ${ctx.status}`);
 };
 
 export default log;

@@ -4,12 +4,17 @@ import log from '@middlewares/logger';
 import Config from '@lib/Config';
 import statistics from '@middlewares/statistics';
 import PluginManager from '@lib/plugins/Loader';
+import Router from '@koa/router';
 
 export class ApiServer {
     private readonly app: Koa;
+    private readonly config: Config;
+    private readonly router: Router = new Router();
 
     constructor() {
         this.app = new Koa();
+        this.config = new Config();
+        this.router = new Router();
     }
 
     /**
@@ -24,13 +29,18 @@ export class ApiServer {
         // 日志中间件
         this.app.use(log);
 
-        if(Config.getBoolean('STATIS_ENABLE')) {
+        if (this.config.getBoolean('STATIS_ENABLE')) {
             // 统计中间件
             this.app.use(statistics);
         }
 
         // 加载插件
-        PluginManager.loadPlugins(this.app);
+        Logger.info('Loading plugins...');
+        PluginManager.loadPlugins(this.app, this.router);
+
+        // 挂载路由
+        this.app.use(this.router.routes());
+        this.app.use(this.router.allowedMethods());
 
         Logger.info(`API Server started in ${Date.now() - start}ms`);
     }

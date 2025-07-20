@@ -1,5 +1,4 @@
 import log4js, { Logger } from "log4js";
-import { Config } from "./Config";
 
 export class LoggerFactory {
     private static instance: Logger;
@@ -42,7 +41,7 @@ export class LoggerFactory {
             categories: {
                 default: {
                     appenders: ['console', 'file', 'errorFilter'],
-                    level: Config.getInstance().get('LOG_LEVEL') || 'info'
+                    level: process.env.LOG_LEVEL || 'info'
                 }
             }
         });

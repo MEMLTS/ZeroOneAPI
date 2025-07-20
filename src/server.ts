@@ -1,7 +1,8 @@
 import { LoggerFactory } from '@lib/Logger';
 import { ApiServer } from './app';
-import config from '@lib/Config';
+import Config from '@lib/Config';
 import { RedisClient } from '@lib/Redis';
+import dotenv from 'dotenv';
 
 const logo = String.raw`
  ________                                ______                        ______   _______  ______
@@ -22,9 +23,12 @@ LoggerFactory.getLogger();
 
 Logger.info('Starting server...');
 
-(async () => {
-    config.load();
+//=== 全局变量初始化 ===
+dotenv.config();
+const config = new Config();
 
+
+(async () => {
     // === Server Config ===
     const PORT = config.getNumber('PORT') || 2598;
     const HOST = config.get('HOST') || '0.0.0.0';
@@ -34,10 +38,10 @@ Logger.info('Starting server...');
 
         // === Redis Config ===
         const redisOptions = {
-            host: Config.get('REDIS_HOST') || 'localhost',
-            port: Config.getNumber('REDIS_PORT') || 6379,
-            password: Config.get('REDIS_PASSWORD') || undefined,
-            db: Config.getNumber('REDIS_DB') || 0,
+            host: config.get('REDIS_HOST') || 'localhost',
+            port: config.getNumber('REDIS_PORT') || 6379,
+            password: config.get('REDIS_PASSWORD') || undefined,
+            db: config.getNumber('REDIS_DB') || 0,
         };
 
         // Redis Client 初始化

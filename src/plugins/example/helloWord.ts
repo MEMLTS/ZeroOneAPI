@@ -1,6 +1,7 @@
+import Plugin from '@lib/plugins/Plugin';
 import { Context, Next } from "koa";
 
-export class ExamplePlugin extends P {
+export class ExamplePlugin extends Plugin {
     constructor() {
         super({
             name: "example",

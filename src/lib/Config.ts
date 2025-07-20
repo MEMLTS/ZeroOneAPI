@@ -1,26 +1,10 @@
-import dotenv from 'dotenv';
-
-export default class Config {
-    private env: NodeJS.ProcessEnv;
-
-    constructor() {
-        this.env = process.env;
-    }
-
-    /**
-     * 加载 .env 文件
-     * @param envFilePath 可选，指定 .env 文件路径
-     */
-    public load(envFilePath?: string) {
-        dotenv.config({ path: envFilePath });
-        this.env = process.env;
-    }
+export class Config {
 
     /**
      * 获取所有环境变量（只读）
      */
     public getAll(): Readonly<NodeJS.ProcessEnv> {
-        return this.env;
+        return process.env;
     }
 
     /**
@@ -28,7 +12,7 @@ export default class Config {
      * @param key
      */
     public get(key: string): string | undefined {
-        const val = this.env[key];
+        const val = process.env[key];
         if (val === undefined) {
             return undefined;
         }
@@ -40,7 +24,7 @@ export default class Config {
      * @param key
      */
     public getRequired(key: string): string {
-        const val = this.env[key];
+        const val = process.env[key];
         if (val === undefined) {
             throw new Error(`Environment variable ${key} is required but not defined.`);
         }
@@ -51,7 +35,7 @@ export default class Config {
      * 获取数值类型环境变量
      */
     public getNumber(key: string): number | undefined {
-        const val = this.env[key];
+        const val = process.env[key];
         if (val === undefined) return undefined;
         const num = Number(val);
         if (isNaN(num)) {
@@ -67,7 +51,7 @@ export default class Config {
      * 其余情况返回 false
      */
     public getBoolean(key: string): boolean {
-        const val = this.env[key];
+        const val = process.env[key];
         if (val === undefined) return false;
         const normalized = val.toLowerCase();
         if (['true', '1', 'yes', 'on','True'].includes(normalized)) return true;
@@ -75,3 +59,5 @@ export default class Config {
         return false;
     }
 }
+
+export default Config;
