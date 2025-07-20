@@ -11,7 +11,7 @@ export class PluginManager {
         const startTime = Date.now();
         const pluginDir = path.join(__dirname, '../../plugins/example');
         if (!fs.existsSync(pluginDir)) {
-            Logger.error(`插件目录不存在: ${pluginDir}`);
+            Logger.error(`The plugin directory does not exist: ${pluginDir}`);
             return;
         }
 
@@ -42,23 +42,23 @@ export class PluginManager {
                 }
 
                 if (!PluginClass || !(PluginClass.prototype instanceof Plugin)) {
-                    Logger.warn(`文件 ${file} 不是合法插件类`);
+                    Logger.warn(`The file ${file} is not a valid plugin class.`);
                     continue;
                 }
 
                 const instance = new PluginClass();
                 this.instances.push(instance);
 
-                Logger.debug(`加载插件：${instance.meta.name}`);
+                Logger.debug(`Loading plugin: ${instance.meta.name}`);
                 this.registerRoutes(router, instance);
             } catch (err) {
-                Logger.error(`加载插件 ${file} 出错:`, err);
+                Logger.error(`Loading plugin ${file} failed:`, err);
             }
         }
 
         this.instances.sort((a, b) => (a.meta.priority ?? 0) - (b.meta.priority ?? 0));
-        Logger.info(`插件加载完成，数量：${this.instances.length}`);
-        Logger.info(`插件加载耗时：${Date.now() - startTime}ms`);
+        Logger.info(`Loaded plugins: ${this.instances.length}`);
+        Logger.info(`Loading plugins took: ${Date.now() - startTime}ms`);
     }
 
     public getPlugins(): Plugin[] {
@@ -75,7 +75,7 @@ export class PluginManager {
             for (const method of methods) {
                 const handlerName = rule.handler;
                 if (!handlerName || typeof (plugin as any)[handlerName] !== 'function') {
-                    Logger.warn(`插件 ${plugin.meta.name} 缺少 handler: ${handlerName}`);
+                    Logger.warn(`Plugin ${plugin.meta.name} is missing handler: ${handlerName}`);
                     continue;
                 }
 
@@ -100,13 +100,13 @@ export class PluginManager {
                             router.patch(routePath, fn);
                             break;
                         default:
-                            Logger.warn(`插件 ${plugin.meta.name} 的 HTTP 方法非法: ${method}`);
+                            Logger.warn(`Plugin ${plugin.meta.name} has invalid HTTP method: ${method}`);
                             break;
                     }
 
-                    Logger.debug(`注册路由: [${method.toUpperCase()}] ${routePath}`);
+                    Logger.debug(`Registering route: [${method.toUpperCase()}] ${routePath}`);
                 } else {
-                    Logger.warn(`插件 ${plugin.meta.name} 缺少 path`);
+                    Logger.warn(`Plugin ${plugin.meta.name} is missing path`);
                 }
             }
         }
