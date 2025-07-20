@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import cors from '@koa/cors';
 import log from '@middlewares/logger';
+import Config from '@lib/Config';
 import statistics from '@middlewares/statistics';
 import PluginManager from '@lib/plugins/Loader';
 
@@ -23,8 +24,10 @@ export class ApiServer {
         // 日志中间件
         this.app.use(log);
 
-        // 统计中间件
-        this.app.use(statistics);
+        if(Config.getBoolean('STATIS_ENABLE')) {
+            // 统计中间件
+            this.app.use(statistics);
+        }
 
         // 加载插件
         PluginManager.loadPlugins(this.app);

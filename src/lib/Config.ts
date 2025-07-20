@@ -1,23 +1,19 @@
 import dotenv from 'dotenv';
 
-export class Config {
-    private static instance: Config;
+export default class Config {
     private env: NodeJS.ProcessEnv;
 
-    private constructor(envFilePath?: string) {
-        dotenv.config({ path: envFilePath });
+    constructor() {
         this.env = process.env;
     }
 
     /**
-     * 获取单例实例
+     * 加载 .env 文件
      * @param envFilePath 可选，指定 .env 文件路径
      */
-    public static getInstance(envFilePath?: string): Config {
-        if (!Config.instance) {
-            Config.instance = new Config(envFilePath);
-        }
-        return Config.instance;
+    public load(envFilePath?: string) {
+        dotenv.config({ path: envFilePath });
+        this.env = process.env;
     }
 
     /**
@@ -66,14 +62,16 @@ export class Config {
 
     /**
      * 获取布尔类型环境变量，默认false
-     * 认为 'true', '1', 'yes' 是 true，其余是 false
+     * 认为 'true', '1', 'yes', 'on','True' 是 true
+     * 认为 'false', '0', 'no', 'off','False' 是 false
+     * 其余情况返回 false
      */
     public getBoolean(key: string): boolean {
         const val = this.env[key];
         if (val === undefined) return false;
         const normalized = val.toLowerCase();
-        if (['true', '1', 'yes'].includes(normalized)) return true;
-        if (['false', '0', 'no'].includes(normalized)) return false;
+        if (['true', '1', 'yes', 'on','True'].includes(normalized)) return true;
+        if (['false', '0', 'no', 'off','False'].includes(normalized)) return false;
         return false;
     }
 }

@@ -1,9 +1,12 @@
 import { Logger } from 'log4js';
 import { RedisClient } from '@lib/Redis';
-import { Config } from '@lib/Config';
+import Plugin from '@lib/plugins/Plugin';
 
 declare global {
     var Logger: Logger;
     var redis: RedisClient;
-    var Config:  Config;
+    var P: typeof Plugin;
+    type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "OPTIONS" | "HEAD";
 }
+
+export {};
