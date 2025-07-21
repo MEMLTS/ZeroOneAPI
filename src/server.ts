@@ -60,7 +60,7 @@ const config = new Config();
         Logger.info('Redis disabled.');
     }
     const server = new ApiServer();
-    server.listen(PORT, HOST);
+    await server.listen(PORT, HOST);
 })().catch(err => {
     Logger.error('Failed to start server:', err);
     process.exit(1);
