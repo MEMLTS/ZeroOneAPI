@@ -9,21 +9,53 @@ export class PluginManager {
 
     public loadPlugins(app: Koa, router: Router): void {
         const startTime = Date.now();
-        const pluginDir = path.join(__dirname, '../../plugins/example');
-        if (!fs.existsSync(pluginDir)) {
-            Logger.error(`The plugin directory does not exist: ${pluginDir}`);
-            return;
+        const pluginsDir = path.join(__dirname, '../../plugins');
+        const exampleDir = path.join(pluginsDir, 'example');
+
+        // 加载 example 目录下所有的 ts 文件
+        this.loadExamplePlugins(exampleDir, router);
+
+        // 加载 plugins 目录下所有文件夹的插件
+        const pluginDirs = fs.readdirSync(pluginsDir).filter(item => fs.statSync(path.join(pluginsDir, item)).isDirectory());
+        for (const pluginFolder of pluginDirs) {
+            const pluginFolderPath = path.join(pluginsDir, pluginFolder);
+            const indexFilePath = path.join(pluginFolderPath, 'index.ts');
+
+            // 如果是一个文件夹且包含 index.ts
+            if (fs.existsSync(indexFilePath)) {
+                try {
+                    const pluginExports = require(indexFilePath);
+                    const pluginsArray: Plugin[] = pluginExports.default || pluginExports;
+
+                    // 确保是数组
+                    if (Array.isArray(pluginsArray)) {
+                        for (const pluginClass of pluginsArray) {
+                            this.loadPlugin(pluginClass, pluginFolder, router);
+                        }
+                    } else {
+                        Logger.warn(`The file ${pluginFolder}/index.ts doesn't export an array of plugins.`);
+                    }
+                } catch (err) {
+                    Logger.error(`Error loading plugin from ${pluginFolder}/index.ts:`, err);
+                }
+            }
         }
 
-        const files = fs.readdirSync(pluginDir);
+        this.instances.sort((a, b) => (a.meta.priority ?? 0) - (b.meta.priority ?? 0));
+        Logger.info(`Loaded plugins: ${this.instances.length}`);
+        Logger.info(`Loading plugins took: ${Date.now() - startTime}ms`);
+    }
 
+    private loadExamplePlugins(exampleDir: string, router: Router): void {
+        if (!fs.existsSync(exampleDir)) return;
+
+        const files = fs.readdirSync(exampleDir);
         for (const file of files) {
             if (!/\.(js|ts)$/.test(file)) continue;
 
-            const pluginPath = path.resolve(pluginDir, file);
-
+            const pluginPath = path.resolve(exampleDir, file);
             try {
-                delete require.cache[pluginPath];
+                delete require.cache[pluginPath];  // 清除缓存
                 const exports = require(pluginPath);
                 let PluginClass: (new () => Plugin) | null = null;
 
@@ -55,10 +87,20 @@ export class PluginManager {
                 Logger.error(`Loading plugin ${file} failed:`, err);
             }
         }
+    }
 
-        this.instances.sort((a, b) => (a.meta.priority ?? 0) - (b.meta.priority ?? 0));
-        Logger.info(`Loaded plugins: ${this.instances.length}`);
-        Logger.info(`Loading plugins took: ${Date.now() - startTime}ms`);
+    private loadPlugin(PluginClass: any, pluginFolder: string, router: Router): void {
+        // 验证是否是有效的插件类
+        if (!(PluginClass.prototype instanceof Plugin)) {
+            Logger.warn(`The file ${pluginFolder}/index.ts does not export a valid plugin class.`);
+            return;
+        }
+
+        const instance = new PluginClass();
+        this.instances.push(instance);
+
+        Logger.debug(`Loading plugin: ${instance.meta.name}`);
+        this.registerRoutes(router, instance);
     }
 
     public getPlugins(): Plugin[] {
