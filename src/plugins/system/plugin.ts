@@ -11,7 +11,7 @@ export class GetAPIList extends Plugin {
             rule: [
                 {
                     path: "/system/getAPIList",
-                    method: ["GET"],
+                    method: ["GET", "POST"],
                     handler: "getAPIListHandler"
                 }
             ]

@@ -19,7 +19,7 @@ const log = async (ctx: Context, next: Next) => {
 
   const endTime = Date.now();
   const statusColor = ctx.status >= 200 && ctx.status < 300 ? chalk.green : chalk.red; // 成功的状态码是绿色，失败的状态码是红色
-  Logger.info(`[${ipColor(ctx.ip)}][Method] ${methodColor(ctx.method)} [Path]${pathColor(decodeURIComponent(ctx.url))} [Status] ${statusColor(ctx.status)} [Time] ${timeColor(endTime - startTime)}ms`);
+  Logger.info(`[${ipColor(ctx.ip)}][Method] ${methodColor(ctx.method)} [Path]${pathColor(decodeURIComponent(ctx.url))} [Status] ${statusColor(ctx.status)} [Time] ${timeColor(endTime - startTime)} ms`);
 };
 
 export default log;
