@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import KoaBody from 'koa-body';
 import cors from '@koa/cors';
 import log from '@middlewares/logger';
 import Config from '@lib/Config';
@@ -28,6 +29,9 @@ export class ApiServer {
 
         // 日志中间件
         this.app.use(log);
+
+        // 解析请求体
+        this.app.use(KoaBody());
 
         if (this.config.getBoolean('STATIS_ENABLE')) {
             // 统计中间件
