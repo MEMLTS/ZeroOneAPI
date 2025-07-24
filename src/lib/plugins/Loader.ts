@@ -4,20 +4,20 @@ import Koa from 'koa';
 import Router from '@koa/router';
 import Plugin from './Plugin';
 
-export class PluginManager {
+class PluginManager {
     private instances: Plugin[] = [];
 
     public loadPlugins(app: Koa, router: Router): void {
         const startTime = Date.now();
         const pluginsDir = path.join(__dirname, '../../plugins');
-        const exampleDir = path.join(pluginsDir, 'example');
 
-        // 加载 example 目录下所有的 ts 文件
-        this.loadExamplePlugins(exampleDir, router);
+        this.loadPluginFromDir(path.join(pluginsDir, 'example'), router);
+        this.loadPluginFromDir(path.join(pluginsDir, 'system'), router);
 
         // 加载 plugins 目录下所有文件夹的插件
         const pluginDirs = fs.readdirSync(pluginsDir).filter(item => fs.statSync(path.join(pluginsDir, item)).isDirectory());
         for (const pluginFolder of pluginDirs) {
+            if (pluginFolder === 'example' || pluginFolder === 'system') continue;
             const pluginFolderPath = path.join(pluginsDir, pluginFolder);
             const indexFilePath = path.join(pluginFolderPath, 'index.ts');
 
@@ -46,14 +46,14 @@ export class PluginManager {
         Logger.info(`Loading plugins took: ${Date.now() - startTime}ms`);
     }
 
-    private loadExamplePlugins(exampleDir: string, router: Router): void {
-        if (!fs.existsSync(exampleDir)) return;
+    private loadPluginFromDir(pluginDir: string, router: Router): void {
+        if (!fs.existsSync(pluginDir)) return;
 
-        const files = fs.readdirSync(exampleDir);
+        const files = fs.readdirSync(pluginDir);
         for (const file of files) {
             if (!/\.(js|ts)$/.test(file)) continue;
 
-            const pluginPath = path.resolve(exampleDir, file);
+            const pluginPath = path.resolve(pluginDir, file);
             try {
                 delete require.cache[pluginPath];  // 清除缓存
                 const exports = require(pluginPath);
