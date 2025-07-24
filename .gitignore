@@ -13,6 +13,8 @@ lerna-debug.log*
 /.idea
 
 # plugins
+/src/plugins/example/*
+!/src/plugins/example/hello.ts
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
